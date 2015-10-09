@@ -15,9 +15,38 @@ class HomeController extends BaseController {
 	|
 	*/
 
-	public function showWelcome()
+	public function index()
 	{
-		return View::make('hello');
+		$data['imagem'] = Session::get('img');
+
+		return View::make('hello', compact('data'));
+	}
+
+	public function store()
+	{
+
+		$imagem = Input::file('imagem');
+
+		$nome_imagem = $imagem->getClientOriginalName();
+
+		$imagem->move('images/', $nome_imagem);
+
+
+		$imagem_final = 'images/'.$nome_imagem;
+
+		$int_image = Image::make($imagem_final);
+
+		$int_image->resize(568, null, function($constraint){
+			
+			$constraint->aspectRatio();
+
+		});
+
+		$int_image->save($imagem_final);
+
+		Session::put('img', $imagem_final);
+		
+		return Redirect::back();
 	}
 
 }
