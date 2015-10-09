@@ -31,10 +31,13 @@ class HomeController extends BaseController {
 
 		$nome_imagem = $imagem->getClientOriginalName();
 
-		$imagem->move('images', $nome_imagem);
+		//Assim era antes, dai fiz a batucada para salvar dentro do public e nao na raiz 
+		// $imagem->move('images', $nome_imagem);
+		// $imagem_final = 'images/'.$nome_imagem;
 
-		$imagem_final = 'images/'.$nome_imagem;
-
+		// Fiz para salvar dentro do public
+		$imagem->move($directory.'/images', $nome_imagem);
+		$imagem_final = $directory.'/images/'.$nome_imagem;
 
 		$int_image = Image::make($imagem_final);
 
