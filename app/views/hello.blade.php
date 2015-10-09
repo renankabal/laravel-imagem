@@ -16,10 +16,10 @@
 	        <h4 class="modal-title" id="myModalLabel">Recorte da imagem</h4>
 	      </div>
 	      <div class="modal-body">
-	        ...
+	        {{ HTML::image($data['imagem'],'', ['id' => 'crop']) }}
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-primary">Save changes</button>
+	        <button type="submit" class="btn btn-primary">Salvar recorte</button>
 	      </div>
 	    </div>
 	  </div>
@@ -28,7 +28,7 @@
 
 	{{ Form::open(array('route' => 'postImage', 'files' => 'true')) }}
 
-		{{ HTML::image($data['imagem'],'', ['id' => 'crop']) }}
+		<img src="{{  $data['imagem']}}">
 		<br>
 		{{ Form::file('imagem') }}
 
@@ -45,10 +45,13 @@
 	
 	<script>
 		$(document).ready(function(){
+
 			$('#crop').Jcrop({
 				aspectRatio: 1, 
 				onSelect: atualizaCoordenadas
-			})
+			});
+
+			$('#myModal').modal({show: true});
 		});
 
 		function atualizaCoordenadas(c){

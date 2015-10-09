@@ -29,10 +29,11 @@ class HomeController extends BaseController {
 
 		$nome_imagem = $imagem->getClientOriginalName();
 
-		$imagem->move('images/', $nome_imagem);
+		$directory = public_path();
 
+		$imagem->move($directory.'/images/', $nome_imagem);
 
-		$imagem_final = 'images/'.$nome_imagem;
+		$imagem_final = $directory.'/images/'.$nome_imagem;
 
 		$int_image = Image::make($imagem_final);
 
@@ -45,7 +46,7 @@ class HomeController extends BaseController {
 		$int_image->save($imagem_final);
 
 		Session::put('img', $imagem_final);
-		
+
 		return Redirect::back();
 	}
 
