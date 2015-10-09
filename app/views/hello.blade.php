@@ -5,6 +5,11 @@
 	<title>Upload</title>
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="jcrop/css/jquery.Jcrop.min.css">
+	<style>
+		.jcrop-holder{
+			opacity: 0;
+		}
+	</style>
 </head>
 <body>
 	<!-- Modal -->
@@ -28,14 +33,17 @@
 
 	{{ Form::open(array('route' => 'postImage', 'files' => 'true')) }}
 
-		<img src="{{  $data['imagem']}}">
+		{{ HTML::image($data['imagem'],'') }}
+
+		<input type="hidden" name="img_bckp" value="{{ $data['imagem'] }}">
+
 		<br>
 		{{ Form::file('imagem') }}
 
 		{{ Form::submit('Enviar imagem') }}
 
 	{{ Form::close() }}
-
+	<input type="hidden" id="modal" value="{{ $data['modal'] }}"/>
 	<script src="jcrop/js/jquery.min.js"></script>
 
 	<script src="jcrop/js/jquery.Jcrop.min.js"></script>
@@ -44,6 +52,13 @@
 	
 	
 	<script>
+		var modal;
+
+		if($('#modal').val() == 'true'){
+			modal = true;
+		}else{
+			modal = false;
+		}
 		$(document).ready(function(){
 
 			$('#crop').Jcrop({
@@ -51,7 +66,7 @@
 				onSelect: atualizaCoordenadas
 			});
 
-			$('#myModal').modal({show: true});
+			$('#myModal').modal({show: modal});
 		});
 
 		function atualizaCoordenadas(c){

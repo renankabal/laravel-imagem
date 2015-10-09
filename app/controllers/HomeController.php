@@ -19,31 +19,42 @@ class HomeController extends BaseController {
 	{
 		$data['imagem'] = Session::get('img');
 
+		$data['modal'] = (Session::get('modal') == null ? 'false' : 'true');
+
 		return View::make('hello', compact('data'));
 	}
 
 	public function store()
 	{
 
-		$imagem = Input::file('imagem');
+		if (Input::hasFile('imagem')){
 
-		$nome_imagem = $imagem->getClientOriginalName();
 
-		$directory = public_path();
+			$imagem = Input::file('imagem');
 
-		$imagem->move($directory.'/images/', $nome_imagem);
+			$nome_imagem = $imagem->getClientOriginalName();
 
-		$imagem_final = $directory.'/images/'.$nome_imagem;
+			$directory = public_path();
 
-		$int_image = Image::make($imagem_final);
+			$imagem->move($directory.'/images/', $nome_imagem);
 
-		$int_image->resize(568, null, function($constraint){
-			
-			$constraint->aspectRatio();
+			$imagem_final = $directory.'/images/'.$nome_imagem;
 
-		});
 
-		$int_image->save($imagem_final);
+
+			$int_image = Image::make($imagem_final);
+
+			$int_image->resize(568, null, function($constraint){
+				
+				$constraint->aspectRatio();
+
+			});
+
+			$int_image->save($imagem_final);
+
+		}else{
+			$imagem_final = Input::get('img_bckp');
+		}
 
 		Session::put('img', $imagem_final);
 
